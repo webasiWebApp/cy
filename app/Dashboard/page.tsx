@@ -2,8 +2,8 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
-import { auth, storage } from "@/lib/firebase";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { auth } from "@/lib/firebase";
+import { upload } from "@vercel/blob/client";
 import {
   subscribeToProducts,
   addProduct,
@@ -127,26 +127,16 @@ export default function DashboardPage() {
     if (file) setImageFile(file);
   };
 
-  const uploadImage = useCallback((): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      if (!imageFile) {
-        resolve(formData.image);
-        return;
-      }
-      const storageRef = ref(storage, `products/${Date.now()}_${imageFile.name}`);
-      const task = uploadBytesResumable(storageRef, imageFile);
-      task.on(
-        "state_changed",
-        (snap) => {
-          setUploadProgress(Math.round((snap.bytesTransferred / snap.totalBytes) * 100));
-        },
-        reject,
-        async () => {
-          const url = await getDownloadURL(task.snapshot.ref);
-          resolve(url);
-        }
-      );
+  const uploadImage = useCallback(async (): Promise<string> => {
+    if (!imageFile) return formData.image;
+    const blob = await upload(imageFile.name, imageFile, {
+      access: "public",
+      handleUploadUrl: "/api/blob",
+      onUploadProgress: ({ percentage }) => {
+        setUploadProgress(Math.round(percentage));
+      },
     });
+    return blob.url;
   }, [imageFile, formData.image]);
 
   const handleSubmit = async (e: React.FormEvent) => {
