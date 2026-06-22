@@ -9,9 +9,10 @@ import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
-  { name: 'Home', href: '#' },
-  { name: 'About', href: '#about' },
-  { name: 'Our Industries', href: '#sectors' },
+  { name: 'Home', href: '/' },
+  { name: 'About', href: '/about' },
+  { name: 'Products', href: '/products' },
+  { name: 'Our Industries', href: '/#sectors' },
 ];
 
 export default function Navbar() {
@@ -52,7 +53,6 @@ export default function Navbar() {
             alt="CY International" 
             width={48} 
             height={48}
-            className="w-12 h-12"
           />
           {/* Optional Text Next to Logo if needed:
           <span className="font-italiana text-gold text-sm tracking-widest hidden sm:block">

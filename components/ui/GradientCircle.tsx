@@ -19,6 +19,7 @@ export default function GradientCircle({ image, size, className, opacity = 0.6 }
         src={`/images/${image}.png`} 
         alt="Decorative background glow" 
         fill 
+        sizes={`${size}px`}
         style={{ objectFit: 'contain' }} 
         priority={false}
       />

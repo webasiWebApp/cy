@@ -19,6 +19,7 @@ export default function CTASection() {
           src="/images/footer.png" 
           alt="CY International" 
           fill 
+          sizes="100vw"
           style={{ objectFit: 'cover', objectPosition: 'center' }} 
         />
       </motion.div>

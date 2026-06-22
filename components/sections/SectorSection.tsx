@@ -31,6 +31,12 @@ const sectors = [
     image: "sector4.png",
     title: "Future Ventures",
     description: "Innovating and investing in future industries that create value, drive growth and build a better tomorrow."
+  },
+   {
+    index: "05",
+    image: "sector4.png",
+    title: "Future Ventures",
+    description: "Innovating and investing in future industries that create value, drive growth and build a better tomorrow."
   }
 ];
 

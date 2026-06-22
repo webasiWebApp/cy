@@ -15,6 +15,7 @@ export default function SectorCard({ index, image, title, description }: SectorC
         src={`/images/${image}`} 
         alt={title}
         fill 
+        sizes="340px"
         style={{ objectFit: 'cover' }}
         className="transition-transform duration-600 ease-in-out group-hover:scale-[1.06]"
       />

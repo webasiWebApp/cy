@@ -38,6 +38,7 @@ export default function HeroSection() {
           src="/images/home.png" 
           alt="CY International Hero Background" 
           fill 
+          sizes="100vw"
           style={{ objectFit: 'cover', objectPosition: 'center' }} 
           priority 
         />
@@ -54,7 +55,7 @@ export default function HeroSection() {
       </div>
 
       {/* Content */}
-      <div className="relative z-20 px-8 md:px-16 lg:px-24 mb-32 w-full max-w-7xl mx-auto">
+      <div className="relative z-20 px-8 md:px-0 lg:px-0 mb-32 w-full max-w-7xl mx-auto">
         <motion.div 
           variants={container}
           initial="hidden"

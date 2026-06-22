@@ -92,6 +92,7 @@ export default function BeautySection() {
                     src={`/images/${icon.img}`} 
                     alt={icon.label} 
                     fill 
+                    sizes="18px"
                     style={{ objectFit: 'contain' }}
                     className="filter brightness-0 saturate-100 sepia-[100%] hue-rotate-[10deg]"
                   />

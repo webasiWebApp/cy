@@ -31,6 +31,7 @@ export default function AboutSection() {
                 src="/images/about.png" 
                 alt="About CY International" 
                 fill 
+                sizes="(max-width: 1024px) 100vw, 50vw"
                 style={{ objectFit: 'cover' }} 
               />
             </div>
@@ -64,16 +65,7 @@ export default function AboutSection() {
             }
           />
 
-          {/* Decorative Logo Mark */}
-          <div className="my-8">
-            <Image 
-              src="/images/logo.png" 
-              alt="Logo Mark" 
-              width={100} 
-              height={100} 
-              className="opacity-30 mix-blend-screen w-20 h-20 md:w-[100px] md:h-[100px]" 
-            />
-          </div>
+          
 
           <div className="space-y-6 font-roboto font-light text-white/60 text-sm leading-7">
             <p>

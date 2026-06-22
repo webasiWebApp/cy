@@ -109,6 +109,7 @@ export default function TraditionSection() {
               src="/images/tradition.png" 
               alt="Crafting Process" 
               fill 
+              sizes="(max-width: 1024px) 100vw, 50vw"
               style={{ objectFit: 'cover' }} 
             />
             {/* Inner shadow overlay for the left edge effect */}

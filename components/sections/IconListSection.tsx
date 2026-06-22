@@ -3,7 +3,6 @@
 import React from 'react';
 import Image from 'next/image';
 import { motion, Variants } from 'framer-motion';
-import GradientCircle from '../ui/GradientCircle';
 
 const features = [
   {
@@ -30,58 +29,93 @@ const features = [
 
 const containerVariants: Variants = {
   hidden: {},
-  visible: { 
-    transition: { staggerChildren: 0.12, delayChildren: 0.1 } 
+  visible: {
+    transition: { staggerChildren: 0.14, delayChildren: 0.05 }
   }
 };
 
 const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 35 },
-  visible: { 
-    opacity: 1, 
-    y: 0, 
-    transition: { duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] } 
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.65, ease: [0.25, 0.46, 0.45, 0.94] }
   }
 };
 
 export default function IconListSection() {
   return (
-    <section className="relative bg-dark py-20 px-8 md:px-16 lg:px-24 border-t border-gold/10 overflow-hidden">
-      
-      {/* Decorative Circle */}
-      <GradientCircle image="circle1" size={500} className="absolute left-1/2 -top-40 -translate-x-1/2 opacity-20" />
+    <section
+      className="relative w-full overflow-hidden"
+      style={{ background: 'linear-gradient(to right, #0a0a0a 0%, #111008 50%, #0a0a0a 100%)' }}
+    >
+      {/* Top hairline */}
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#b8922a]/40 to-transparent" />
+      {/* Bottom hairline */}
+      <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#b8922a]/40 to-transparent" />
 
-      <motion.div 
-        className="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0"
+      <motion.div
+        className="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: '-50px' }}
+        viewport={{ once: true, margin: '-40px' }}
       >
         {features.map((feature, index) => (
-          <motion.div 
-            key={index} 
+          <motion.div
+            key={index}
             variants={itemVariants}
-            className="px-8 py-10 sm:border-r border-b sm:border-b-0 lg:border-b-0 border-gold/10 last:border-r-0 last:border-b-0 sm:[&:nth-child(2n)]:border-r-0 lg:[&:nth-child(2n)]:border-r lg:[&:nth-child(4n)]:border-r-0"
+            className="group relative flex items-start gap-5 px-8 py-9
+              /* vertical dividers between items */
+              lg:[&:not(:last-child)]:after:content-['']
+              lg:[&:not(:last-child)]:after:absolute
+              lg:[&:not(:last-child)]:after:right-0
+              lg:[&:not(:last-child)]:after:top-[15%]
+              lg:[&:not(:last-child)]:after:h-[70%]
+              lg:[&:not(:last-child)]:after:w-px
+              lg:[&:not(:last-child)]:after:bg-gradient-to-b
+              lg:[&:not(:last-child)]:after:from-transparent
+              lg:[&:not(:last-child)]:after:via-[#b8922a]/30
+              lg:[&:not(:last-child)]:after:to-transparent
+            "
           >
-            <div className="relative w-10 h-10 mb-5">
-              <Image 
-                src={`/images/${feature.icon}`} 
-                alt={feature.title} 
-                fill 
+            {/* Icon */}
+            <div
+              className="relative shrink-0 w-12 h-12 mt-0.5 transition-transform duration-300 group-hover:scale-110"
+            >
+              <Image
+                src={`/images/${feature.icon}`}
+                alt={feature.title}
+                fill
+                sizes="48px"
                 style={{ objectFit: 'contain' }}
-                /* CSS filter trick to convert black/white icon to gold tint */
-                className="filter brightness-0 saturate-100 sepia-[100%] hue-rotate-[10deg] opacity-90"
+                className="transition-opacity duration-300 opacity-90 group-hover:opacity-100"
               />
             </div>
-            
-            <h3 className="font-italiana text-xl text-white mb-3">
-              {feature.title}
-            </h3>
-            
-            <p className="font-roboto text-sm text-white/55 leading-relaxed">
-              {feature.description}
-            </p>
+
+            {/* Text */}
+            <div className="flex flex-col gap-1.5">
+              <h3
+                className="font-italiana tracking-widest uppercase text-sm font-semibold leading-snug"
+                style={{ color: '#d4a84b', letterSpacing: '0.12em' }}
+              >
+                {feature.title}
+              </h3>
+              <p
+                className="text-xs leading-relaxed font-roboto max-w-[190px]"
+                style={{ color: 'rgba(255,255,255,0.45)', textTransform: 'capitalize' }}
+              >
+                {feature.description}
+              </p>
+            </div>
+
+            {/* Subtle hover glow */}
+            <div
+              className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+              style={{
+                background: 'radial-gradient(ellipse 60% 60% at 30% 50%, rgba(180,138,50,0.06), transparent)'
+              }}
+            />
           </motion.div>
         ))}
       </motion.div>

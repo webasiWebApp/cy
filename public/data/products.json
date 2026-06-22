@@ -1,0 +1,110 @@
+[
+  {
+    "id": 1,
+    "name": "Terracotta Planter — Large",
+    "description": "Hand-thrown large terracotta planter with a classic rim finish. Perfect for indoor palms, olive trees, or statement plants. Naturally porous, promoting healthy root aeration.",
+    "price": 4800,
+    "category": "Planters",
+    "image": "sector1.png",
+    "whatsappMessage": "Hi, I'm interested in the Terracotta Planter — Large (LKR 4,800). Could you share more details?"
+  },
+  {
+    "id": 2,
+    "name": "Terracotta Planter — Medium",
+    "description": "Elegant medium-sized handcrafted planter ideal for herbs, succulents, and flowering plants. Each piece carries unique artisan marks.",
+    "price": 2900,
+    "category": "Planters",
+    "image": "sector2.png",
+    "whatsappMessage": "Hi, I'm interested in the Terracotta Planter — Medium (LKR 2,900). Could you share more details?"
+  },
+  {
+    "id": 3,
+    "name": "Clay Water Pitcher",
+    "description": "Traditional Sri Lankan clay water pitcher that naturally cools water without electricity. Handcrafted using generations-old techniques for authentic purity.",
+    "price": 3500,
+    "category": "Kitchenware",
+    "image": "sector3.png",
+    "whatsappMessage": "Hi, I'm interested in the Clay Water Pitcher (LKR 3,500). Could you share more details?"
+  },
+  {
+    "id": 4,
+    "name": "Artisan Clay Bowl Set (3-Piece)",
+    "description": "A curated set of three handcrafted clay bowls in graduating sizes. Food-safe, kiln-fired, and perfect for serving rice, curries, or desserts the traditional way.",
+    "price": 5200,
+    "category": "Kitchenware",
+    "image": "sector4.png",
+    "whatsappMessage": "Hi, I'm interested in the Artisan Clay Bowl Set (LKR 5,200). Could you share more details?"
+  },
+  {
+    "id": 5,
+    "name": "Decorative Clay Vase — Tall",
+    "description": "Slim, elongated decorative vase with a hand-etched floral motif. A statement piece for living rooms, entryways, or minimalist interiors.",
+    "price": 6800,
+    "category": "Decor",
+    "image": "sector1.png",
+    "whatsappMessage": "Hi, I'm interested in the Decorative Clay Vase — Tall (LKR 6,800). Could you share more details?"
+  },
+  {
+    "id": 6,
+    "name": "Clay Oil Lamp (Set of 2)",
+    "description": "Traditional Aththamma-style oil lamps handcrafted in natural clay. Ideal for festive occasions, daily rituals, or gifting. Set of two.",
+    "price": 1800,
+    "category": "Decor",
+    "image": "sector2.png",
+    "whatsappMessage": "Hi, I'm interested in the Clay Oil Lamp Set (LKR 1,800). Could you share more details?"
+  },
+  {
+    "id": 7,
+    "name": "Hanging Clay Wind Chime",
+    "description": "Delicate handmade clay wind chime with earthy tones. Each piece produces a soft, soothing tone. Hand-finished and weather-resistant for outdoor use.",
+    "price": 2400,
+    "category": "Decor",
+    "image": "sector3.png",
+    "whatsappMessage": "Hi, I'm interested in the Hanging Clay Wind Chime (LKR 2,400). Could you share more details?"
+  },
+  {
+    "id": 8,
+    "name": "Mini Terracotta Planter Set (6-Pack)",
+    "description": "Six petite terracotta planters in assorted rim styles — perfect for windowsill herb gardens, succulent collections, or gifting.",
+    "price": 3200,
+    "category": "Planters",
+    "image": "sector4.png",
+    "whatsappMessage": "Hi, I'm interested in the Mini Terracotta Planter Set (LKR 3,200). Could you share more details?"
+  },
+  {
+    "id": 9,
+    "name": "Clay Cooking Pot — Medium",
+    "description": "Authentic clay cooking pot kiln-fired for high heat resistance. Slow-cooks curries and stews beautifully, enhancing natural flavours without additives.",
+    "price": 4200,
+    "category": "Kitchenware",
+    "image": "sector1.png",
+    "whatsappMessage": "Hi, I'm interested in the Clay Cooking Pot — Medium (LKR 4,200). Could you share more details?"
+  },
+  {
+    "id": 10,
+    "name": "Artisan Wall Plaque",
+    "description": "Hand-sculpted clay wall plaque featuring traditional Sri Lankan folk patterns. Ready to hang, UV-sealed, and fade-resistant. A collector's piece.",
+    "price": 7500,
+    "category": "Decor",
+    "image": "sector2.png",
+    "whatsappMessage": "Hi, I'm interested in the Artisan Wall Plaque (LKR 7,500). Could you share more details?"
+  },
+  {
+    "id": 11,
+    "name": "Clay Tealight Holder Set (4-Pack)",
+    "description": "Four individually handcrafted tealight holders with geometric cut-out patterns. Creates a warm, ambient glow — ideal for dining or meditation.",
+    "price": 2200,
+    "category": "Decor",
+    "image": "sector3.png",
+    "whatsappMessage": "Hi, I'm interested in the Clay Tealight Holder Set (LKR 2,200). Could you share more details?"
+  },
+  {
+    "id": 12,
+    "name": "Rustic Clay Mug",
+    "description": "Chunky, hand-thrown clay mug with a comfortable grip and natural earth tones. Food-safe glaze, microwave-safe, and dishwasher-friendly.",
+    "price": 1600,
+    "category": "Kitchenware",
+    "image": "sector4.png",
+    "whatsappMessage": "Hi, I'm interested in the Rustic Clay Mug (LKR 1,600). Could you share more details?"
+  }
+]
