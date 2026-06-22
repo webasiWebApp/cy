@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
@@ -17,7 +16,12 @@ export default function LoginPage() {
     setError("");
     setLoading(true);
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const supabase = createClient();
+      const { error: authError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      if (authError) throw authError;
       router.push("/Dashboard");
     } catch {
       setError("Invalid email or password. Please try again.");

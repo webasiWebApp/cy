@@ -27,7 +27,7 @@ export default function ProductsPageContent() {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
-  /* ── Firestore real-time subscription ── */
+  /* ── Supabase real-time subscription ── */
   useEffect(() => {
     setLoading(true);
     const unsub = subscribeToProducts((data) => {

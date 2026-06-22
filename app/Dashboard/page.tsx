@@ -1,14 +1,14 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { onAuthStateChanged, signOut, User } from "firebase/auth";
-import { auth } from "@/lib/firebase";
-import { upload } from "@vercel/blob/client";
+import { createClient } from "@/utils/supabase/client";
+import type { User } from "@supabase/supabase-js";
 import {
   subscribeToProducts,
   addProduct,
   updateProduct,
   deleteProduct,
+  uploadProductImage,
   Product,
 } from "@/lib/products";
 import { useRouter } from "next/navigation";
@@ -54,12 +54,17 @@ export default function DashboardPage() {
 
   // Auth guard
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (u) => {
-      setUser(u);
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user);
       setAuthLoading(false);
-      if (!u) router.push("/Dashboard/login");
+      if (!user) router.push("/Dashboard/login");
     });
-    return unsub;
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+      if (!session?.user) router.push("/Dashboard/login");
+    });
+    return () => subscription.unsubscribe();
   }, [router]);
 
   // Products subscription
@@ -81,7 +86,8 @@ export default function DashboardPage() {
   }, [imageFile, formData.image]);
 
   const handleLogout = async () => {
-    await signOut(auth);
+    const supabase = createClient();
+    await supabase.auth.signOut();
     router.push("/Dashboard/login");
   };
 
@@ -129,14 +135,7 @@ export default function DashboardPage() {
 
   const uploadImage = useCallback(async (): Promise<string> => {
     if (!imageFile) return formData.image;
-    const blob = await upload(imageFile.name, imageFile, {
-      access: "public",
-      handleUploadUrl: "/api/blob",
-      onUploadProgress: ({ percentage }) => {
-        setUploadProgress(Math.round(percentage));
-      },
-    });
-    return blob.url;
+    return uploadProductImage(imageFile, (pct) => setUploadProgress(pct));
   }, [imageFile, formData.image]);
 
   const handleSubmit = async (e: React.FormEvent) => {
