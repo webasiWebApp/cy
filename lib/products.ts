@@ -69,19 +69,33 @@ export function subscribeToProducts(
 ): () => void {
   const supabase = createClient();
   let channel: RealtimeChannel;
+  let pollInterval: NodeJS.Timeout;
 
   const fetchAll = async () => {
     const { data, error } = await supabase
       .from(TABLE)
       .select("*")
       .order("created_at", { ascending: false });
-    if (!error && data) callback((data as DBProduct[]).map(toProduct));
+      
+    if (error) {
+      console.error("Supabase fetch error (Check RLS policies):", error);
+      return;
+    }
+    
+    if (data) {
+      callback((data as DBProduct[]).map(toProduct));
+    }
   };
 
   // Initial load
   fetchAll();
 
-  // Live updates
+  // Polling fallback (every 5 seconds) in case Realtime isn't enabled in the dashboard
+  pollInterval = setInterval(() => {
+    fetchAll();
+  }, 5000);
+
+  // Live updates via Supabase Realtime
   channel = supabase
     .channel("products-changes")
     .on(
@@ -92,6 +106,7 @@ export function subscribeToProducts(
     .subscribe();
 
   return () => {
+    clearInterval(pollInterval);
     supabase.removeChannel(channel);
   };
 }
@@ -132,26 +147,23 @@ export async function uploadProductImage(
   file: File,
   onProgress?: (pct: number) => void
 ): Promise<string> {
-  const supabase = createClient();
-  const ext = file.name.split(".").pop() ?? "jpg";
-  const path = `${Date.now()}.${ext}`;
-
-  // Supabase JS v2 doesn't expose upload progress natively;
-  // simulate 0 → 50 → 100 so the progress bar still animates.
   onProgress?.(10);
 
-  const { data, error } = await supabase.storage
-    .from("product-images")
-    .upload(path, file, { upsert: false, cacheControl: "3600" });
+  const body = new FormData();
+  body.append("file", file);
 
-  onProgress?.(90);
+  onProgress?.(40);
 
-  if (error) throw error;
+  const res = await fetch("/api/upload", { method: "POST", body });
 
-  const {
-    data: { publicUrl },
-  } = supabase.storage.from("product-images").getPublicUrl(data.path);
+  onProgress?.(85);
 
+  if (!res.ok) {
+    const json = await res.json().catch(() => ({}));
+    throw new Error(json.error ?? `Upload failed (${res.status})`);
+  }
+
+  const { url } = await res.json();
   onProgress?.(100);
-  return publicUrl;
+  return url as string;
 }

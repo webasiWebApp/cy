@@ -15,12 +15,12 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <main className="bg-dark overflow-x-hidden selection:bg-gold/30 selection:text-gold-light">
-      <Navbar />
+      
       <AboutPageHero />
       <AboutContentSection />
       <VisionMissionSection />
       <CTASection />
-      <Footer />
+    
     </main>
   );
 }

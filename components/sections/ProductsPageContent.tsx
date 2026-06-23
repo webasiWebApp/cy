@@ -64,7 +64,7 @@ export default function ProductsPageContent() {
       const matchesPrice = p.price >= priceRange.min && p.price <= priceRange.max;
       return matchesSearch && matchesCategory && matchesPrice;
     });
-  }, [search, activeCategory, priceRange]);
+  }, [search, activeCategory, priceRange, products]);
 
   /* ── Pagination ── */
   const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));

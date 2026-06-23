@@ -12,7 +12,7 @@ import Footer from '@/components/sections/Footer'
 export default function Home() {
   return (
     <main className="bg-dark overflow-x-hidden selection:bg-gold/30 selection:text-gold-light">
-      <Navbar />
+    
       <HeroSection />
       <IconListSection />
       <AboutSection />
@@ -21,7 +21,7 @@ export default function Home() {
       <BeautySection />
       <InsightsSection />
       <CTASection />
-      <Footer />
+     
     </main>
   )
 }

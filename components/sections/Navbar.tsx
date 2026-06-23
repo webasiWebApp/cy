@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from '../ui/Button';
 import { Menu, X } from 'lucide-react';
@@ -19,6 +20,23 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeItem, setActiveItem] = useState('Home');
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const currentItem = navItems.find((item) => {
+      if (item.href === '/') {
+        return pathname === '/';
+      }
+      const itemPath = item.href.split('#')[0] || '/';
+      return pathname.startsWith(itemPath) && itemPath !== '/';
+    });
+
+    if (currentItem) {
+      setActiveItem(currentItem.name);
+    } else if (pathname === '/') {
+      setActiveItem('Home');
+    }
+  }, [pathname]);
 
   useEffect(() => {
     const handleScroll = () => {

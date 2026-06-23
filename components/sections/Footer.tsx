@@ -105,7 +105,7 @@ export default function Footer() {
             © 2025 CY INTERNATIONAL. PRECISION IN TRADITION.
           </p>
           <p className="font-roboto text-[10px] text-white/25 tracking-widest text-center md:text-right">
-            CRAFTED WITH PRIDE IN SRI LANKA 🇱🇰
+            CRAFTED BY PRABLO 360
           </p>
         </div>
 

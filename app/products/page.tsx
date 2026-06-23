@@ -12,9 +12,9 @@ export const metadata: Metadata = {
 export default function ProductsPage() {
   return (
     <main className="bg-dark overflow-x-hidden selection:bg-gold/30 selection:text-gold-light">
-      <Navbar />
+   
       <ProductsPageContent />
-      <Footer />
+     
     </main>
   );
 }
