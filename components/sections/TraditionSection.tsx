@@ -37,7 +37,7 @@ export default function TraditionSection() {
             }
           />
 
-          <p className="font-roboto font-light text-white/60 text-sm leading-7 max-w-lg mt-6 mb-10">
+          <p className="font-roboto font-light text-white/90 text-sm leading-7 max-w-lg mt-6 mb-10">
             Every piece we make carries the touch of tradition, and the soul of the artisan. From forming the clay to the final fire, our process is a celebration of attention and art heritage. A living testament to Sri Lanka&apos;s rich legacy.
           </p>
 
@@ -53,7 +53,7 @@ export default function TraditionSection() {
                     EARTH TO FORM
                   </h4>
                 </div>
-                <p className="font-roboto text-xs text-white/50 leading-relaxed pl-14">
+                <p className="font-roboto text-xs text-white/90 leading-relaxed pl-14">
                   Each vessel begins as raw natural clay, shaped entirely by hand with time-honored tradition.
                 </p>
               </div>
@@ -69,7 +69,7 @@ export default function TraditionSection() {
                     FIRE & RESILIENCE
                   </h4>
                 </div>
-                <p className="font-roboto text-xs text-white/50 leading-relaxed pl-14">
+                <p className="font-roboto text-xs text-white/90 leading-relaxed pl-14">
                   Kiln-fired at high temperatures to build strength, longevity, and a timeless earthy finish.
                 </p>
               </div>
@@ -85,7 +85,7 @@ export default function TraditionSection() {
                     FINISH & HERITAGE
                   </h4>
                 </div>
-                <p className="font-roboto text-xs text-white/50 leading-relaxed pl-14">
+                <p className="font-roboto text-xs text-white/90 leading-relaxed pl-14">
                   Finished with care, each piece reflects the cultural depth and artisanal pride of Sri Lankan craft.
                 </p>
               </div>

@@ -75,7 +75,7 @@ export default function HeroSection() {
             </span>
           </motion.h1>
           
-          <motion.p variants={item} className="font-roboto font-light text-white/70 text-base md:text-lg max-w-lg mt-6 leading-relaxed">
+          <motion.p variants={item} className="font-roboto font-light text-white/90 text-base md:text-lg max-w-lg mt-6 leading-relaxed">
             Premium handcrafted clay products, sustainable agriculture, and future-focused
             ventures rooted in Sri Lankan craftsmanship and innovation.
           </motion.p>

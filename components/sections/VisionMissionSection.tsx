@@ -125,7 +125,7 @@ export default function VisionMissionSection() {
               </h4>
 
               {/* Body */}
-              <p className="font-roboto font-light text-white/55 text-sm leading-7">
+              <p className="font-roboto font-light text-white/90 text-sm leading-7">
                 {card.body}
               </p>
             </motion.div>

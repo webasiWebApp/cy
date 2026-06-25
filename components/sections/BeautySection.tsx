@@ -76,7 +76,7 @@ export default function BeautySection() {
             }
           />
 
-          <p className="font-roboto font-light text-white/60 text-sm leading-7 mt-6">
+          <p className="font-roboto font-light text-white/90 text-sm leading-7 mt-6">
             Our clay products are designed to bring warmth and authenticity to your table. Each piece undergoes rigorous quality checks — from clay selection and wheel-throwing to firing temperatures and final inspection — ensuring every product that leaves our studio meets our standards of quiet excellence.
           </p>
 
@@ -123,7 +123,7 @@ export default function BeautySection() {
               <div className="font-italiana text-6xl md:text-7xl text-gold mb-4">
                 <Counter end={counter.end} suffix={counter.suffix} />
               </div>
-              <p className="font-roboto text-xs text-white/50 tracking-wider uppercase mt-2 max-w-[150px] leading-relaxed">
+              <p className="font-roboto text-xs text-white/90 tracking-wider uppercase mt-2 max-w-[150px] leading-relaxed">
                 {counter.label}
               </p>
             </div>

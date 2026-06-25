@@ -123,8 +123,8 @@ export default function ProductsPageContent() {
     return (
       <div className="relative min-h-screen bg-dark flex items-center justify-center">
         <div className="text-center">
-          <p className="font-italiana text-3xl text-white/30 mb-3">Oops</p>
-          <p className="font-roboto text-sm text-white/40">{fetchError}</p>
+          <p className="font-italiana text-3xl text-white/90 mb-3">Oops</p>
+          <p className="font-roboto text-sm text-white/90">{fetchError}</p>
         </div>
       </div>
     );
@@ -259,7 +259,7 @@ export default function ProductsPageContent() {
               <div className="max-w-7xl mx-auto pt-4 pb-2 flex flex-col gap-4">
                 {/* Category */}
                 <div>
-                  <p className="font-roboto text-[9px] tracking-[0.3em] text-white/30 uppercase mb-2">Category</p>
+                  <p className="font-roboto text-[9px] tracking-[0.3em] text-white/90 uppercase mb-2">Category</p>
                   <div className="flex flex-wrap gap-2">
                     {ALL_CATEGORIES.map((cat) => (
                       <button
@@ -278,7 +278,7 @@ export default function ProductsPageContent() {
                 </div>
                 {/* Price */}
                 <div>
-                  <p className="font-roboto text-[9px] tracking-[0.3em] text-white/30 uppercase mb-2">Price Range</p>
+                  <p className="font-roboto text-[9px] tracking-[0.3em] text-white/90 uppercase mb-2">Price Range</p>
                   <div className="flex flex-wrap gap-2">
                     {PRICE_RANGES.map((r, i) => (
                       <button
@@ -303,7 +303,7 @@ export default function ProductsPageContent() {
 
       {/* ── Results summary ── */}
       <div className="max-w-7xl mx-auto px-8 md:px-16 lg:px-24 pt-10 pb-2 flex items-center justify-between">
-        <p className="font-roboto text-xs text-white/30 tracking-wide">
+        <p className="font-roboto text-xs text-white/90 tracking-wide">
           {filtered.length === 0
             ? 'No products found'
             : `Showing ${(safePage - 1) * ITEMS_PER_PAGE + 1}–${Math.min(safePage * ITEMS_PER_PAGE, filtered.length)} of ${filtered.length} product${filtered.length !== 1 ? 's' : ''}`}
@@ -334,8 +334,8 @@ export default function ProductsPageContent() {
               exit={{ opacity: 0 }}
               className="flex flex-col items-center justify-center py-32 text-center"
             >
-              <p className="font-italiana text-3xl text-white/20 mb-3">No products found</p>
-              <p className="font-roboto text-sm text-white/25">Try adjusting your search or filters.</p>
+              <p className="font-italiana text-3xl text-white/90 mb-3">No products found</p>
+              <p className="font-roboto text-sm text-white/90">Try adjusting your search or filters.</p>
             </motion.div>
           ) : (
             <motion.div

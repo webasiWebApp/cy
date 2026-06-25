@@ -46,7 +46,7 @@ export default function Footer() {
             <h2 className="font-italiana text-gold text-lg mt-3">
               CY INTERNATIONAL
             </h2>
-            <p className="font-roboto text-xs text-white/40 leading-relaxed mt-3 max-w-[200px]">
+            <p className="font-roboto text-xs text-white/90 leading-relaxed mt-3 max-w-[200px]">
               Precision in Tradition. Building a sustainable future through crafted excellence across multiple industries.
             </p>
           </div>
@@ -101,10 +101,10 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="mt-16 pt-6 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="font-roboto text-[10px] text-white/25 tracking-widest text-center md:text-left">
+          <p className="font-roboto text-[10px] text-white/90 tracking-widest text-center md:text-left">
             © 2025 CY INTERNATIONAL. PRECISION IN TRADITION.
           </p>
-          <p className="font-roboto text-[10px] text-white/25 tracking-widest text-center md:text-right">
+          <p className="font-roboto text-[10px] text-white/90 tracking-widest text-center md:text-right">
             CRAFTED BY PRABLO 360
           </p>
         </div>

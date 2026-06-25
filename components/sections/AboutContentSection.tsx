@@ -63,7 +63,7 @@ export default function AboutContentSection() {
             <Image src="/images/logo.png" alt="CY International" width={36} height={36} />
             <div>
               <p className="font-italiana text-gold text-sm tracking-wider leading-none">CY International</p>
-              <p className="font-roboto text-[10px] text-white/40 tracking-widest uppercase mt-1">Est. Sri Lanka</p>
+              <p className="font-roboto text-[10px] text-white/90 tracking-widest uppercase mt-1">Est. Sri Lanka</p>
             </div>
           </motion.div>
         </motion.div>
