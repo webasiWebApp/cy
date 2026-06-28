@@ -7,37 +7,31 @@ import SectionHeading from '../ui/SectionHeading';
 import InsightCard from '../cards/InsightCard';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-const insights = [
+const feedbacks = [
   { 
-    category: "CRAFTSMANSHIP", 
-    title: "The Art of Clay: How Sri Lankan Tradition Shapes Our Work", 
-    review: "Our clay products are designed to bring warmth and authenticity to your table. Each piece undergoes rigorous quality from clay selection and wheel-throwing, guided by generations of artisan knowledge.", 
-    date: "Jan 2025" 
+    name: "Römeka Nanayakkara Perera", 
+    review: "Highly recommend. Love the products and good customer service. Best wishes for future success" 
   },
   { 
-    category: "CRAFTSMANSHIP", 
-    title: "The Art of Clay: How Sri Lankan Tradition Shapes Our Work", 
-    review: "Our clay products are designed to bring warmth and authenticity to your table. Each piece undergoes rigorous quality from clay selection and wheel-throwing, guided by generations of artisan knowledge.", 
-    date: "Feb 2025" 
+    name: "Araliya Mandakini", 
+    review: "මුලින්ම කියන්නම ඕනි customer care එක නම් හරිම සුහදශීලී..ඉල්ලුව හැමදේම හරියටම,හරි වෙලාවටම එවලා තිබුනා.ඒකත් COD.අපිව විශ්වාස කරලා එවනවට බොහොම ස්තුති.හරිම පරිස්සමෙන් මං ඉල්ලුව සෙට් එකම එවලා තිබුනා ❤️🤝" 
   },
   { 
-    category: "AGRICULTURE", 
-    title: "From Soil to Table: Our Sustainable Farming Journey", 
-    review: "We believe sustainable agriculture isn't just a practice — it's a philosophy. From watermelon cultivation to soil preservation, every crop we grow tells a story of care.", 
-    date: "Mar 2025" 
+    name: "Udawalawe Tusker Safari Service", 
+    review: "Hi, I bought 4 curry bowls, 1 rice bowl and 5 table mats for all the bowls. It was great. No any damages. Within one day, they delivered to us. And they were brought very carefully packed. Highly recommended these products. Thank you so much for great service and the products with reasonable price and superb quality. It was a family business I think. Really appreciate their service. I will definitely buy again. 😊 Thank you!" 
   },
   { 
-    category: "EXPORT", 
-    title: "Taking Sri Lanka to the World: Our Export Vision", 
-    review: "Quality is our passport. Through rigorous compliance, trusted partnerships, and a commitment to Sri Lankan heritage, we bring our best to international markets.", 
-    date: "Apr 2025" 
+    name: "Nilu Abeysinghe", 
+    review: "⭐⭐⭐⭐⭐ Very good quality clay curry pot 👍 Strong, neat, and food tastes great. Highly recommended! 😊" 
   },
   { 
-    category: "CRAFTSMANSHIP", 
-    title: "The Art of Clay: How Sri Lankan Tradition Shapes Our Work", 
-    review: "Our clay products are designed to bring warmth and authenticity to your table. Each piece undergoes rigorous quality from clay selection and wheel-throwing, guided by generations of artisan knowledge.", 
-    date: "May 2025" 
+    name: "Shaku Uddeepani", 
+    review: "very freindly team, gives exactly whats shown in the images. Quality is really good 😍😍. Delivered within 2 days to my location. Got a free gift as well. thank you C Y international team. keep up the good work. I'll surely order again and again 😍🤩" 
   },
+  { 
+    name: "Riznoon Mohamed", 
+    review: "From my experience, CY customer service team is committed to providing prompt and attentive support. They offer fast delivery options to ensure orders arrive on time, along with high-quality, eco-friendly products. Additionally, they stand behind the quality of their items; if any products arrive damaged, they provide warranty replacements to guarantee customer satisfaction, which was a big plus for me. Highly recommended for a reliable and environmentally conscious shopping experience. 10/10." 
+  }
 ];
 
 export default function InsightsSection() {
@@ -79,7 +73,8 @@ export default function InsightsSection() {
             transition={{ duration: 0.85, ease: [0.25, 0.46, 0.45, 0.94] }}
           >
             <SectionHeading 
-              title={<>Insights & <em>Stories</em></>}
+              eyebrow="TESTIMONIALS"
+              title={<>Customer <em>Feedback</em></>}
             />
           </motion.div>
 
@@ -122,14 +117,12 @@ export default function InsightsSection() {
         transition={{ duration: 0.85, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
       >
         <div className="overflow-hidden" ref={emblaRef}>
-          <div className="flex gap-6 pb-10">
-            {insights.map((insight, idx) => (
+          <div className="flex gap-6 pb-10 items-stretch">
+            {feedbacks.map((feedback, idx) => (
               <InsightCard 
                 key={idx}
-                category={insight.category}
-                title={insight.title}
-                review={insight.review}
-                date={insight.date}
+                name={feedback.name}
+                review={feedback.review}
               />
             ))}
           </div>

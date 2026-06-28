@@ -100,13 +100,17 @@ export default function SectorSection() {
         <div className="overflow-hidden" ref={emblaRef}>
           <div className="flex gap-6 pb-10">
             {sectors.map((sector) => (
-              <SectorCard 
+              <div 
                 key={sector.index}
-                index={sector.index}
-                image={sector.image}
-                title={sector.title}
-                description={sector.description}
-              />
+                className="shrink-0 p-[1px] bg-gradient-to-br from-gold via-black to-[#1a1a1a]"
+              >
+                <SectorCard 
+                  index={sector.index}
+                  image={sector.image}
+                  title={sector.title}
+                  description={sector.description}
+                />
+              </div>
             ))}
           </div>
         </div>

@@ -94,7 +94,7 @@ export default function BeautySection() {
                     fill 
                     sizes="18px"
                     style={{ objectFit: 'contain' }}
-                    className="filter brightness-0 saturate-100 sepia-[100%] hue-rotate-[10deg]"
+                    className=""
                   />
                 </div>
                 <span className="font-roboto text-xs text-white/70 tracking-wider">
@@ -120,7 +120,7 @@ export default function BeautySection() {
               key={idx} 
               className="bg-dark p-10 flex flex-col items-start justify-center aspect-square md:aspect-auto md:h-64"
             >
-              <div className="font-italiana text-6xl md:text-7xl text-gold mb-4">
+              <div className="font-roboto text-6xl md:text-7xl text-gold mb-4">
                 <Counter end={counter.end} suffix={counter.suffix} />
               </div>
               <p className="font-roboto text-xs text-white/90 tracking-wider uppercase mt-2 max-w-[150px] leading-relaxed">
