@@ -32,12 +32,14 @@ const sectors = [
     title: "Future Ventures",
     description: "Innovating and investing in future industries that create value, drive growth and build a better tomorrow."
   },
-   {
+   
+  {
     index: "05",
     image: "sector4.png",
-    title: "Future Ventures",
-    description: "Innovating and investing in future industries that create value, drive growth and build a better tomorrow."
-  }
+    title: "Table & Floor Mats",
+    description: "High-quality handwoven and crafted table mats and floor mats — blending traditional artisanship with modern aesthetics for homes and hospitality."
+  },
+
 ];
 
 export default function SectorSection() {

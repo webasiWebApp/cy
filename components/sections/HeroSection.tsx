@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
 import { motion, useScroll, useTransform, Variants } from 'framer-motion';
 import Button from '../ui/Button';
 import GradientCircle from '../ui/GradientCircle';
@@ -32,16 +31,19 @@ export default function HeroSection() {
 
   return (
     <section className="relative min-h-screen overflow-hidden flex flex-col justify-end">
-      {/* Background Image with Parallax */}
+      {/* Background Video with Parallax */}
       <motion.div style={{ y }} className="absolute inset-0 z-0">
-        <Image 
-          src="/images/home.png" 
-          alt="CY International Hero Background" 
-          fill 
-          sizes="100vw"
-          style={{ objectFit: 'cover', objectPosition: 'center' }} 
-          priority 
-        />
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          poster="/images/home.png"
+          className="w-full h-full object-cover pointer-events-none"
+        >
+          <source src="/Video/hero.mov" type="video/mp4" />
+          <source src="/Video/hero.mov" type="video/quicktime" />
+        </video>
       </motion.div>
 
       {/* Gradients */}

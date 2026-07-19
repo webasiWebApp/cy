@@ -55,6 +55,7 @@ export default function AboutPageHero() {
             alt="CY International Logo"
             width={72}
             height={72}
+            style={{ width: 'auto', height: 'auto' }}
             className="w-16 h-16 md:w-[72px] md:h-[72px]"
           />
         </motion.div>

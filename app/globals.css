@@ -9,6 +9,7 @@
 
   --font-roboto: var(--font-roboto), sans-serif;
   --font-italiana: var(--font-italiana), serif;
+  --font-cormorant: var(--font-cormorant), serif;
 
   --background-image-gold-gradient: linear-gradient(135deg, #EDBF7E 0%, #C9A870 100%);
 }

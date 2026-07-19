@@ -103,7 +103,7 @@ export default function IconListSection() {
               </h3>
               <p
                 className="text-xs leading-relaxed font-roboto max-w-[190px]"
-                style={{ color: 'rgba(255,255,255,0.45)', textTransform: 'capitalize' }}
+                style={{ color: 'rgba(255, 255, 255, 0.91)', textTransform: 'capitalize' }}
               >
                 {feature.description}
               </p>

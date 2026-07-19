@@ -97,7 +97,7 @@ export default function AboutContentSection() {
             />
           </motion.div>
 
-          <motion.div variants={fadeUp} className="mt-8 space-y-6 font-roboto font-light text-white/60 text-sm leading-7">
+          <motion.div variants={fadeUp} className="mt-8 space-y-6 font-roboto font-light text-white/90 text-sm leading-7">
             <p>
               CY International Pvt Ltd is a diversified Sri Lankan company built on a foundation of
               craftsmanship, sustainability, and long-term vision. What began with handcrafted clay
