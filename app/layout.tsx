@@ -25,6 +25,11 @@ const cormorant = Cormorant_Garamond({
 export const metadata: Metadata = {
   title: "CY International",
   description: "Precision in Tradition. Building a sustainable future through crafted excellence across multiple industries.",
+  icons: {
+    icon: "/images/favion.ico",
+    shortcut: "/images/favion.ico",
+    apple: "/images/favion.ico",
+  },
 };
 
 export default function RootLayout({
