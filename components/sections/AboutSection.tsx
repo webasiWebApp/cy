@@ -28,7 +28,7 @@ export default function AboutSection() {
             <div className="absolute inset-0 border border-gold/20 translate-x-4 translate-y-4" />
             <div className="relative w-full h-full overflow-hidden">
               <Image 
-                src="/images/about.png" 
+                src="/images/about.webp" 
                 alt="About CY International" 
                 fill 
                 sizes="(max-width: 1024px) 100vw, 50vw"

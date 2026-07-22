@@ -106,7 +106,7 @@ export default function TraditionSection() {
           
           <div className="relative w-full h-full shadow-[inset_20px_0_40px_rgba(9,9,10,0.5)] z-10 overflow-hidden">
             <Image 
-              src="/images/tradition.png" 
+              src="/images/tradition.webp" 
               alt="Crafting Process" 
               fill 
               sizes="(max-width: 1024px) 100vw, 50vw"
