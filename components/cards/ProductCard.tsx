@@ -20,7 +20,7 @@ interface ProductCardProps {
   index?: number;
 }
 
-const WHATSAPP_NUMBER = '94XXXXXXXXX'; // Replace with actual WhatsApp number
+const WHATSAPP_NUMBER = '94786677891';
 
 export default function ProductCard({ product, index = 0 }: ProductCardProps) {
   const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(product.whatsappMessage)}`;
