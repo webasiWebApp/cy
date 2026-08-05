@@ -17,12 +17,14 @@ import { useRouter } from "next/navigation";
 const CATEGORIES = ["Planters", "Kitchenware", "Decor", "Other"];
 
 // ─── Empty product form ───────────────────────────────────────────────────────
-const emptyForm = (): Omit<Product, "id" | "createdAt"> => ({
+// ─── Empty product form ───────────────────────────────────────────────────────
+const emptyForm = (): Omit<Product, "id" | "createdAt"> & { images?: string[] } => ({
   name: "",
   description: "",
   price: 0,
   category: "Planters",
   image: "",
+  images: [],
   whatsappMessage: "",
 });
 
@@ -45,12 +47,16 @@ export default function DashboardPage() {
   const [deleteTarget, setDeleteTarget] = useState<Product | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string>("");
+  // 3 image slots for multi-image upload
+  const [imageSlots, setImageSlots] = useState<{ url: string; file: File | null }[]>([
+    { url: "", file: null },
+    { url: "", file: null },
+    { url: "", file: null },
+  ]);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const batchFileInputRef = useRef<HTMLInputElement>(null);
 
   // Auth guard
   useEffect(() => {
@@ -74,17 +80,6 @@ export default function DashboardPage() {
     return unsub;
   }, [user]);
 
-  // Image preview
-  useEffect(() => {
-    if (imageFile) {
-      const url = URL.createObjectURL(imageFile);
-      setImagePreview(url);
-      return () => URL.revokeObjectURL(url);
-    } else {
-      setImagePreview(formData.image || "");
-    }
-  }, [imageFile, formData.image]);
-
   const handleLogout = async () => {
     const supabase = createClient();
     await supabase.auth.signOut();
@@ -94,8 +89,11 @@ export default function DashboardPage() {
   const openAddModal = () => {
     setEditingProduct(null);
     setFormData(emptyForm());
-    setImageFile(null);
-    setImagePreview("");
+    setImageSlots([
+      { url: "", file: null },
+      { url: "", file: null },
+      { url: "", file: null },
+    ]);
     setFormError("");
     setUploadProgress(0);
     setModalOpen(true);
@@ -103,16 +101,25 @@ export default function DashboardPage() {
 
   const openEditModal = (product: Product) => {
     setEditingProduct(product);
+    const productImages = product.images && product.images.length > 0
+      ? product.images
+      : (product.image ? [product.image] : []);
+
     setFormData({
       name: product.name,
       description: product.description,
       price: product.price,
       category: product.category,
       image: product.image,
+      images: productImages,
       whatsappMessage: product.whatsappMessage,
     });
-    setImageFile(null);
-    setImagePreview(product.image || "");
+
+    setImageSlots([
+      { url: productImages[0] || "", file: null },
+      { url: productImages[1] || "", file: null },
+      { url: productImages[2] || "", file: null },
+    ]);
     setFormError("");
     setUploadProgress(0);
     setModalOpen(true);
@@ -122,21 +129,68 @@ export default function DashboardPage() {
     setModalOpen(false);
     setEditingProduct(null);
     setFormData(emptyForm());
-    setImageFile(null);
-    setImagePreview("");
+    setImageSlots([
+      { url: "", file: null },
+      { url: "", file: null },
+      { url: "", file: null },
+    ]);
     setFormError("");
     setUploadProgress(0);
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) setImageFile(file);
+  const handleSingleSlotChange = (index: number, file: File) => {
+    setImageSlots((prev) => {
+      const next = [...prev];
+      next[index] = {
+        url: URL.createObjectURL(file),
+        file,
+      };
+      return next;
+    });
   };
 
-  const uploadImage = useCallback(async (): Promise<string> => {
-    if (!imageFile) return formData.image;
-    return uploadProductImage(imageFile, (pct) => setUploadProgress(pct));
-  }, [imageFile, formData.image]);
+  const handleBatchFilesChange = (filesList: FileList | File[]) => {
+    const files = Array.from(filesList).slice(0, 3);
+    if (!files.length) return;
+
+    setImageSlots((prev) => {
+      const next = [...prev];
+      let fileIdx = 0;
+      // First try to fill empty slots
+      for (let i = 0; i < 3 && fileIdx < files.length; i++) {
+        if (!next[i].url && !next[i].file) {
+          const file = files[fileIdx++];
+          next[i] = { url: URL.createObjectURL(file), file };
+        }
+      }
+      // If remaining files exist, replace starting from slot 0
+      for (let i = 0; fileIdx < files.length && i < 3; i++) {
+        const file = files[fileIdx++];
+        next[i] = { url: URL.createObjectURL(file), file };
+      }
+      return next;
+    });
+  };
+
+  const removeSlot = (index: number) => {
+    setImageSlots((prev) => {
+      const filtered = prev.filter((_, i) => i !== index);
+      while (filtered.length < 3) {
+        filtered.push({ url: "", file: null });
+      }
+      return filtered;
+    });
+  };
+
+  const setAsPrimarySlot = (index: number) => {
+    if (index === 0) return;
+    setImageSlots((prev) => {
+      const next = [...prev];
+      const [item] = next.splice(index, 1);
+      next.unshift(item);
+      return next;
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -144,10 +198,42 @@ export default function DashboardPage() {
     if (!formData.name.trim()) { setFormError("Product name is required."); return; }
     if (formData.price <= 0) { setFormError("Price must be greater than 0."); return; }
 
+    const activeSlots = imageSlots.filter((s) => Boolean(s.url || s.file));
+    if (!activeSlots.length) {
+      setFormError("Please upload at least one image.");
+      return;
+    }
+
     setFormLoading(true);
+    setUploadProgress(10);
     try {
-      const imageUrl = await uploadImage();
-      const payload = { ...formData, image: imageUrl, price: Number(formData.price) };
+      const uploadedUrls: string[] = [];
+
+      for (let i = 0; i < imageSlots.length; i++) {
+        const slot = imageSlots[i];
+        if (slot.file) {
+          const url = await uploadProductImage(slot.file, (pct) => {
+            const overallPct = Math.round(10 + ((i + pct / 100) / Math.max(activeSlots.length, 1)) * 80);
+            setUploadProgress(overallPct);
+          });
+          uploadedUrls.push(url);
+        } else if (slot.url && !slot.url.startsWith("blob:")) {
+          uploadedUrls.push(slot.url);
+        }
+      }
+
+      setUploadProgress(95);
+
+      const primaryImage = uploadedUrls[0] || "";
+      const payload = {
+        name: formData.name,
+        description: formData.description,
+        price: Number(formData.price),
+        category: formData.category,
+        image: primaryImage,
+        images: uploadedUrls,
+        whatsappMessage: formData.whatsappMessage,
+      };
 
       if (editingProduct?.id) {
         await updateProduct(editingProduct.id, payload);
@@ -155,10 +241,11 @@ export default function DashboardPage() {
         await addProduct(payload);
       }
       closeModal();
-    } catch {
-      setFormError("Something went wrong. Please try again.");
+    } catch (err: any) {
+      setFormError(err?.message || "Something went wrong. Please try again.");
     } finally {
       setFormLoading(false);
+      setUploadProgress(0);
     }
   };
 
@@ -371,6 +458,11 @@ export default function DashboardPage() {
                   ) : (
                     <div className="db-product-img-placeholder">🏺</div>
                   )}
+                  {product.images && product.images.length > 1 && (
+                    <div className="db-card-img-badge">
+                      📷 {product.images.length} Images
+                    </div>
+                  )}
                   <div className="db-product-cat-badge">{product.category}</div>
                 </div>
                 <div className="db-product-body">
@@ -426,49 +518,134 @@ export default function DashboardPage() {
             </div>
 
             <form onSubmit={handleSubmit} className="db-modal-form">
-              {/* Image upload */}
+              {/* Multi-Image Upload (Up to 3 images) */}
               <div className="db-form-field">
-                <label className="db-form-label">Product Image</label>
-                <div
-                  className="db-img-upload"
-                  onClick={() => fileInputRef.current?.click()}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => e.key === "Enter" && fileInputRef.current?.click()}
-                  id="image-upload-zone"
-                >
-                  {imagePreview ? (
-                    <div className="db-img-preview-wrap">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={imagePreview} alt="Preview" className="db-img-preview" />
-                      <div className="db-img-preview-overlay">
-                        <span>Change image</span>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="db-img-placeholder">
-                      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-                        <rect x="2" y="6" width="28" height="20" rx="3" stroke="#EDBF7E" strokeWidth="1.5"/>
-                        <circle cx="22" cy="13" r="2.5" stroke="#EDBF7E" strokeWidth="1.5"/>
-                        <path d="M2 22l7-6 5 5 4-4 7 6" stroke="#EDBF7E" strokeWidth="1.5" strokeLinejoin="round"/>
-                      </svg>
-                      <span>Click to upload image</span>
-                      <small>PNG, JPG, WebP up to 5MB</small>
-                    </div>
-                  )}
+                <div className="db-form-label-row">
+                  <label className="db-form-label">Product Images (Up to 3)</label>
+                  <span className="db-img-count-hint">
+                    {imageSlots.filter((s) => Boolean(s.url || s.file)).length} / 3 Selected
+                  </span>
                 </div>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="db-file-input"
-                  id="image-file-input"
-                />
+
+                <div className="db-img-slots-grid">
+                  {imageSlots.map((slot, idx) => {
+                    const isPrimary = idx === 0;
+                    const hasImage = Boolean(slot.url || slot.file);
+
+                    return (
+                      <div
+                        key={idx}
+                        className={`db-img-slot ${isPrimary ? "db-img-slot--primary" : ""} ${
+                          hasImage ? "db-img-slot--filled" : ""
+                        }`}
+                      >
+                        <div className="db-img-slot-header">
+                          <span className="db-img-slot-title">
+                            {isPrimary ? "★ Primary" : `Image ${idx + 1}`}
+                          </span>
+                          {hasImage && !isPrimary && (
+                            <button
+                              type="button"
+                              className="db-img-primary-btn"
+                              onClick={() => setAsPrimarySlot(idx)}
+                              title="Make Primary Image"
+                            >
+                              Set Main
+                            </button>
+                          )}
+                        </div>
+
+                        {hasImage ? (
+                          <div className="db-img-preview-wrap">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={slot.url} alt={`Product ${idx + 1}`} className="db-img-preview" />
+                            <div className="db-img-slot-actions">
+                              <label className="db-img-action-btn" title="Change Image">
+                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                  <path
+                                    d="M10 1.5L12.5 4 5 11.5H2.5V9L10 1.5z"
+                                    stroke="currentColor"
+                                    strokeWidth="1.4"
+                                  />
+                                </svg>
+                                <input
+                                  type="file"
+                                  accept="image/*"
+                                  className="db-file-input"
+                                  onChange={(e) => {
+                                    const f = e.target.files?.[0];
+                                    if (f) handleSingleSlotChange(idx, f);
+                                  }}
+                                />
+                              </label>
+                              <button
+                                type="button"
+                                className="db-img-action-btn db-img-action-btn--delete"
+                                onClick={() => removeSlot(idx)}
+                                title="Remove Image"
+                              >
+                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                  <path
+                                    d="M2 3.5h10M5.5 3.5V2.5a.5.5 0 01.5-.5h2a.5.5 0 01.5.5v1M4 3.5l.75 7.5h4.5L10 3.5"
+                                    stroke="currentColor"
+                                    strokeWidth="1.4"
+                                  />
+                                </svg>
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <label className="db-img-placeholder-slot">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                              <rect x="3" y="5" width="18" height="14" rx="3" stroke="#EDBF7E" strokeWidth="1.5" />
+                              <circle cx="16.5" cy="10" r="1.5" stroke="#EDBF7E" strokeWidth="1.5" />
+                              <path
+                                d="M3 18l5-4.5 4 4 3-3 6 4.5"
+                                stroke="#EDBF7E"
+                                strokeWidth="1.5"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                            <span>+ Add Image</span>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="db-file-input"
+                              onChange={(e) => {
+                                const f = e.target.files?.[0];
+                                if (f) handleSingleSlotChange(idx, f);
+                              }}
+                            />
+                          </label>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <div className="db-batch-upload-row">
+                  <label className="db-batch-upload-btn">
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                      <path d="M8 2v12M2 8h12" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+                    </svg>
+                    Upload 2 or 3 images at once
+                    <input
+                      ref={batchFileInputRef}
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      className="db-file-input"
+                      onChange={(e) => {
+                        if (e.target.files?.length) handleBatchFilesChange(e.target.files);
+                      }}
+                    />
+                  </label>
+                </div>
+
                 {uploadProgress > 0 && uploadProgress < 100 && (
-                  <div className="db-progress">
+                  <div className="db-progress" style={{ marginTop: "0.5rem" }}>
                     <div className="db-progress-bar" style={{ width: `${uploadProgress}%` }} />
-                    <span>{uploadProgress}%</span>
+                    <span>Uploading images… {uploadProgress}%</span>
                   </div>
                 )}
               </div>
@@ -961,28 +1138,71 @@ export default function DashboardPage() {
         }
         .db-autofill-btn:hover { background: rgba(237,191,126,0.15); }
 
-        /* ─── Image upload ─── */
-        .db-img-upload {
-          border: 2px dashed rgba(237,191,126,0.2);
-          border-radius: 12px; cursor: pointer;
-          overflow: hidden; transition: border-color 0.2s;
-          aspect-ratio: 16/9;
+        /* ─── Multi-Image upload ─── */
+        .db-img-count-hint { font-size: 0.75rem; color: #EDBF7E; font-weight: 600; }
+        .db-img-slots-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-top: 0.25rem; }
+        @media (max-width: 540px) {
+          .db-img-slots-grid { grid-template-columns: 1fr; }
         }
-        .db-img-upload:hover { border-color: rgba(237,191,126,0.4); }
-        .db-img-placeholder {
-          display: flex; flex-direction: column; align-items: center; justify-content: center;
-          gap: 0.5rem; height: 100%; color: rgba(237,191,126,0.5);
-          font-size: 0.875rem;
+        .db-img-slot {
+          position: relative;
+          background: rgba(255,255,255,0.03);
+          border: 1px dashed rgba(255,255,255,0.15);
+          border-radius: 12px;
+          overflow: hidden;
+          display: flex; flex-direction: column;
+          height: 130px;
+          transition: all 0.2s;
         }
-        .db-img-placeholder small { font-size: 0.75rem; color: rgba(255,255,255,0.2); }
-        .db-img-preview-wrap { position: relative; height: 100%; }
+        .db-img-slot--primary { border-color: rgba(237,191,126,0.45); background: rgba(237,191,126,0.02); }
+        .db-img-slot--filled { border-style: solid; border-color: rgba(255,255,255,0.25); }
+        .db-img-slot-header {
+          display: flex; align-items: center; justify-content: space-between;
+          padding: 4px 8px; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+          position: absolute; top: 0; left: 0; right: 0; z-index: 10;
+        }
+        .db-img-slot-title { font-size: 0.65rem; font-weight: 700; color: #EDBF7E; text-transform: uppercase; letter-spacing: 0.05em; }
+        .db-img-primary-btn {
+          font-size: 0.62rem; color: #fff; background: rgba(237,191,126,0.25);
+          border: 1px solid rgba(237,191,126,0.4); border-radius: 4px; padding: 1px 5px;
+          cursor: pointer; transition: background 0.2s; font-family: var(--font-roboto);
+        }
+        .db-img-primary-btn:hover { background: rgba(237,191,126,0.5); }
+        .db-img-preview-wrap { position: relative; width: 100%; height: 100%; }
         .db-img-preview { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .db-img-preview-overlay {
-          position: absolute; inset: 0; background: rgba(0,0,0,0.5);
-          display: flex; align-items: center; justify-content: center;
-          opacity: 0; transition: opacity 0.2s; color: #fff; font-size: 0.875rem; font-weight: 500;
+        .db-img-slot-actions {
+          position: absolute; bottom: 6px; right: 6px; display: flex; gap: 4px; z-index: 10;
         }
-        .db-img-upload:hover .db-img-preview-overlay { opacity: 1; }
+        .db-img-action-btn {
+          width: 26px; height: 26px; border-radius: 6px;
+          background: rgba(9,9,10,0.85); border: 1px solid rgba(255,255,255,0.2);
+          display: flex; align-items: center; justify-content: center;
+          color: #fff; cursor: pointer; transition: all 0.2s;
+        }
+        .db-img-action-btn:hover { background: #EDBF7E; color: #09090A; border-color: #EDBF7E; }
+        .db-img-action-btn--delete:hover { background: #ef4444; color: #fff; border-color: #ef4444; }
+        .db-img-placeholder-slot {
+          display: flex; flex-direction: column; align-items: center; justify-content: center;
+          gap: 0.35rem; width: 100%; height: 100%; color: rgba(237,191,126,0.6);
+          font-size: 0.72rem; cursor: pointer; padding-top: 1.25rem; transition: background 0.2s;
+        }
+        .db-img-placeholder-slot:hover { background: rgba(237,191,126,0.06); color: #EDBF7E; }
+        .db-batch-upload-row { display: flex; justify-content: center; margin-top: 0.5rem; }
+        .db-batch-upload-btn {
+          display: inline-flex; align-items: center; gap: 0.4rem;
+          font-size: 0.75rem; color: #EDBF7E; background: rgba(237,191,126,0.08);
+          border: 1px dashed rgba(237,191,126,0.3); border-radius: 8px;
+          padding: 0.4rem 0.85rem; cursor: pointer; transition: all 0.2s;
+          font-family: var(--font-roboto);
+        }
+        .db-batch-upload-btn:hover { background: rgba(237,191,126,0.15); border-color: #EDBF7E; }
+        .db-card-img-badge {
+          position: absolute; top: 8px; right: 8px;
+          background: rgba(9,9,10,0.8); backdrop-filter: blur(4px);
+          border: 1px solid rgba(237,191,126,0.3); border-radius: 20px;
+          padding: 2px 8px; font-size: 0.68rem; color: #EDBF7E; font-weight: 600;
+          z-index: 5;
+        }
         .db-file-input { display: none; }
         .db-progress {
           display: flex; align-items: center; gap: 0.5rem;

@@ -3,6 +3,8 @@ import type { RealtimeChannel } from "@supabase/supabase-js";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
+// ─── Types ────────────────────────────────────────────────────────────────────
+
 export interface Product {
   id?: string;
   name: string;
@@ -10,6 +12,7 @@ export interface Product {
   price: number;
   category: string;
   image: string;
+  images?: string[];
   whatsappMessage: string;
   createdAt?: string;
 }
@@ -22,6 +25,7 @@ interface DBProduct {
   price: number;
   category: string;
   image: string;
+  images?: string[] | string | null;
   whatsapp_message: string;
   created_at: string;
 }
@@ -29,25 +33,62 @@ interface DBProduct {
 // ─── Mapping helpers ──────────────────────────────────────────────────────────
 
 function toProduct(row: DBProduct): Product {
+  let imagesArr: string[] = [];
+
+  if (Array.isArray(row.images)) {
+    imagesArr = row.images.filter(Boolean);
+  } else if (typeof row.images === "string" && row.images.trim()) {
+    try {
+      const parsed = JSON.parse(row.images);
+      if (Array.isArray(parsed)) imagesArr = parsed.filter(Boolean);
+      else imagesArr = [row.images];
+    } catch {
+      imagesArr = [row.images];
+    }
+  }
+
+  const rawImage = typeof row.image === "string" ? row.image.trim() : "";
+
+  if (imagesArr.length === 0 && rawImage) {
+    if (rawImage.startsWith("[")) {
+      try {
+        const parsed = JSON.parse(rawImage);
+        if (Array.isArray(parsed)) imagesArr = parsed.filter(Boolean);
+        else imagesArr = [rawImage];
+      } catch {
+        imagesArr = [rawImage];
+      }
+    } else {
+      imagesArr = [rawImage];
+    }
+  }
+
+  const primaryImage = imagesArr[0] || (rawImage.startsWith("[") ? "" : rawImage);
+
   return {
     id: row.id,
     name: row.name,
     description: row.description,
     price: row.price,
     category: row.category,
-    image: row.image,
+    image: primaryImage,
+    images: imagesArr.length > 0 ? imagesArr : (primaryImage ? [primaryImage] : []),
     whatsappMessage: row.whatsapp_message,
     createdAt: row.created_at,
   };
 }
 
 function toRow(p: Omit<Product, "id" | "createdAt">) {
+  const imagesList = p.images && p.images.length > 0 ? p.images : (p.image ? [p.image] : []);
+  const primaryImage = imagesList[0] || p.image || "";
+
   return {
     name: p.name,
     description: p.description,
     price: p.price,
     category: p.category,
-    image: p.image,
+    image: primaryImage,
+    images: imagesList,
     whatsapp_message: p.whatsappMessage,
   };
 }
@@ -115,7 +156,17 @@ export async function addProduct(
   data: Omit<Product, "id" | "createdAt">
 ): Promise<void> {
   const supabase = createClient();
-  const { error } = await supabase.from(TABLE).insert(toRow(data));
+  const row = toRow(data);
+  let { error } = await supabase.from(TABLE).insert(row);
+
+  if (error && (error.message?.includes("images") || error.code === "PGRST204" || error.code === "42703")) {
+    const imagesList = data.images && data.images.length > 0 ? data.images : (data.image ? [data.image] : []);
+    const encodedImage = imagesList.length > 1 ? JSON.stringify(imagesList) : (imagesList[0] || data.image || "");
+    const { images, ...fallbackRow } = { ...row, image: encodedImage };
+    const { error: retryError } = await supabase.from(TABLE).insert(fallbackRow);
+    if (retryError) throw retryError;
+    return;
+  }
   if (error) throw error;
 }
 
@@ -124,7 +175,17 @@ export async function updateProduct(
   data: Omit<Product, "id" | "createdAt">
 ): Promise<void> {
   const supabase = createClient();
-  const { error } = await supabase.from(TABLE).update(toRow(data)).eq("id", id);
+  const row = toRow(data);
+  let { error } = await supabase.from(TABLE).update(row).eq("id", id);
+
+  if (error && (error.message?.includes("images") || error.code === "PGRST204" || error.code === "42703")) {
+    const imagesList = data.images && data.images.length > 0 ? data.images : (data.image ? [data.image] : []);
+    const encodedImage = imagesList.length > 1 ? JSON.stringify(imagesList) : (imagesList[0] || data.image || "");
+    const { images, ...fallbackRow } = { ...row, image: encodedImage };
+    const { error: retryError } = await supabase.from(TABLE).update(fallbackRow).eq("id", id);
+    if (retryError) throw retryError;
+    return;
+  }
   if (error) throw error;
 }
 
@@ -166,4 +227,20 @@ export async function uploadProductImage(
   const { url } = await res.json();
   onProgress?.(100);
   return url as string;
+}
+
+export async function uploadMultipleProductImages(
+  files: File[],
+  onProgress?: (pct: number) => void
+): Promise<string[]> {
+  if (!files.length) return [];
+  onProgress?.(10);
+  const results: string[] = [];
+  for (let i = 0; i < files.length; i++) {
+    const url = await uploadProductImage(files[i]);
+    results.push(url);
+    onProgress?.(Math.round(((i + 1) / files.length) * 90));
+  }
+  onProgress?.(100);
+  return results;
 }

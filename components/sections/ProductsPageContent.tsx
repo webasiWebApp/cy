@@ -123,7 +123,7 @@ export default function ProductsPageContent() {
     return (
       <div className="relative min-h-screen bg-dark flex items-center justify-center">
         <div className="text-center">
-          <p className="font-italiana text-3xl text-white/90 mb-3">Oops</p>
+          <p className="font-poppins font-semibold text-3xl text-white/90 mb-3">Oops</p>
           <p className="font-roboto text-sm text-white/90">{fetchError}</p>
         </div>
       </div>
@@ -150,7 +150,7 @@ export default function ProductsPageContent() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1 }}
-          className="font-italiana text-5xl md:text-7xl text-white leading-[1.1]"
+          className="font-poppins font-semibold text-5xl md:text-7xl text-white leading-[1.1]"
         >
           Our <span className="text-gold">Collection</span>
         </motion.h1>
@@ -334,7 +334,7 @@ export default function ProductsPageContent() {
               exit={{ opacity: 0 }}
               className="flex flex-col items-center justify-center py-32 text-center"
             >
-              <p className="font-italiana text-3xl text-white/90 mb-3">No products found</p>
+              <p className="font-poppins font-semibold text-3xl text-white/90 mb-3">No products found</p>
               <p className="font-roboto text-sm text-white/90">Try adjusting your search or filters.</p>
             </motion.div>
           ) : (

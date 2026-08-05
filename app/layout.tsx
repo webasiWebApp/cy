@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Roboto, Italiana, Cormorant_Garamond } from "next/font/google";
+import { Roboto, Italiana, Cormorant_Garamond, Poppins } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
@@ -22,6 +22,12 @@ const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
 });
 
+const poppins = Poppins({
+  variable: "--font-poppins",
+  weight: ["300", "400", "500", "600", "700"],
+  subsets: ["latin"],
+});
+
 export const metadata: Metadata = {
   title: "CY International",
   description: "Precision in Tradition. Building a sustainable future through crafted excellence across multiple industries.",
@@ -40,7 +46,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${roboto.variable} ${italiana.variable} ${cormorant.variable} h-full antialiased`}
+      className={`${roboto.variable} ${italiana.variable} ${cormorant.variable} ${poppins.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <Navbar />
