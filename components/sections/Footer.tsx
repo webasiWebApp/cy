@@ -104,9 +104,9 @@ export default function Footer() {
           <p className="font-roboto text-[10px] text-white/90 tracking-widest text-center md:text-left">
             © 2025 CY INTERNATIONAL. PRECISION IN TRADITION.
           </p>
-          <p className="font-roboto text-[10px] text-white/90 tracking-widest text-center md:text-right">
+          {/* <p className="font-roboto text-[10px] text-white/90 tracking-widest text-center md:text-right">
             CRAFTED BY PRABLO 360
-          </p>
+          </p> */}
         </div>
 
       </div>
